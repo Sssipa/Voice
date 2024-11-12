@@ -41,7 +41,7 @@ def extract_features(file_path):
 
     # Ekstraksi Spectral Rolloff
     spectral_rolloff = librosa.feature.spectral_rolloff(y=y, sr=sr, roll_percent=0.85)
-    spectral_rolloff = spectral_rolloff.flatgiten()  # Meratakan roll-off menjadi satu vektor
+    spectral_rolloff = spectral_rolloff.flatten()  # Meratakan roll-off menjadi satu vektor
     
     # Gabungkan MFCC dan spectral rolloff sebagai fitur
     feature = np.hstack((mfcc, spectral_rolloff))
@@ -56,7 +56,7 @@ models = {
 }
 
 # Path dataset
-dataset_path = 'E:\Coding\Semester 3\Pengenalan Pola\Voice\dataset'  # Ganti dengan path ke folder dataset Anda
+dataset_path = 'E:\Coding\Semester 3\Pengenalan Pola\Voice\dataset' 
 
 # Pelatihan Model/Algoritma
 X, y = load_dataset(dataset_path)
@@ -119,15 +119,20 @@ for model_name, model in models.items():
     recall_list.append(recall)
     f1_list.append(f1)
 
-plt.figure(figsize=(8, 6))
-plt.bar(model_names, accuracies, color='red', label='Accuracy')
-plt.bar(model_names, precision_list, color='yellow', label='Precision')
-plt.bar(model_names, recall_list, color='green', label='Recall')
-plt.bar(model_names, f1_list, color='blue', label='F1-Score')
+# Plot bar chart
+bar_width = 0.2
+index = np.arange(len(model_names))
+
+plt.figure(figsize=(10, 7))
+plt.bar(index, accuracies, bar_width, color='red', label='Accuracy')
+plt.bar(index + bar_width, precision_list, bar_width, color='yellow', label='Precision')
+plt.bar(index + 2 * bar_width, recall_list, bar_width, color='green', label='Recall')
+plt.bar(index + 3 * bar_width, f1_list, bar_width, color='blue', label='F1-Score')
 
 plt.title('Perbandingan Akurasi, Precision, Recall, F1-Score Model Voice Recognition dengan Spectral Rolloff')
 plt.xlabel('Model')
 plt.ylabel('Score (%)')
 plt.ylim(0, 100)
+plt.xticks(index + bar_width, model_names)
 plt.legend()
 plt.show()
