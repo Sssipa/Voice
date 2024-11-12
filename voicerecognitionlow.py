@@ -28,24 +28,19 @@ def load_dataset(dataset_path):
 
 # Pre-Processing
 def pre_process_data(X):
-    X = np.nan_to_num(X)  # Menangani nilai NaN atau tak terdefinisi
+    X = np.nan_to_num(X)  
     return X
 
 # Ekstraksi Fitur
 def extract_features(file_path):
     y, sr = librosa.load(file_path, sr=None)
     
-    # Ekstraksi MFCC
-    mfcc = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=13)
-    mfcc = mfcc.flatten()  # Meratakan MFCC menjadi satu vektor
-
-    # Ekstraksi Spectral Rolloff
     spectral_rolloff = librosa.feature.spectral_rolloff(y=y, sr=sr, roll_percent=0.85)
-    spectral_rolloff = spectral_rolloff.flatten()  # Meratakan roll-off menjadi satu vektor
+    feature = spectral_rolloff.flatten() 
     
-    # Gabungkan MFCC dan spectral rolloff sebagai fitur
-    feature = np.hstack((mfcc, spectral_rolloff))
     return feature
+
+    
 
 # Pembuatan Model/Algoritma
 models = {
